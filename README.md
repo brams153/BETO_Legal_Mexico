@@ -8,6 +8,7 @@ Este modelo es una evolución del aporte desarrollado por el **Instituto de Inge
  * **Linaje:** Basado en **RigoBERTa-2.0**, que a su vez integra las capacidades de **BETO, BERT y Legal BERT**.
  * **Especialización:** Al igual que sus modelos base, es un sistema monolingüe diseñado para el español, pero con un *fine-tuning* específico que le permite comprender la terminología y estructura del sistema jurídico mexicano. 
 * Utiliza BERT (multilingüe), reconocido como uno de los modelos más eficaces en el ecosistema actual de NLP.
+### Documentación en página Hugo [aquí](https://brams153.github.io/BETO_Legal_Mexico/)
 ### Arquitectura de Datos y Operaciones
 El sistema garantiza un ciclo de vida de alto nivel mediante una infraestructura moderna:
  * **Ingesta Masiva:** Automatiza la recopilación de corpus legales desde fuentes oficiales como la **Suprema Corte de Justicia de la Nación (SCJN)** y la **Biblioteca Jurídica de la UNAM**.
