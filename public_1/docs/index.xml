@@ -1,0 +1,537 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Beto Legal Mexico – </title>
+    <link>//localhost:1313/docs/</link>
+    <description>Recent content on Beto Legal Mexico</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 24 May 2026 00:00:00 +0000</lastBuildDate>
+    
+	  <atom:link href="//localhost:1313/docs/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      
+        
+      
+    
+    
+    <item>
+      <title>Guía de Instalación</title>
+      <link>//localhost:1313/docs/installation/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/installation/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Configuración del Entorno&lt;/h1&gt;&lt;p&gt;Este módulo detalla los pasos para desplegar el entorno de desarrollo y ejecución de los pipelines de ingesta e inferencia.&lt;/p&gt;
+&lt;h2&gt;Requisitos del Sistema (Linux)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;requisitos-del-sistema-linux&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#requisitos-del-sistema-linux&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Para la configuración del entorno en tu sistema local (ideal para una gestión orientada a terminal en entornos como Lubuntu con i3wm), necesitas instalar las herramientas base para la extracción de texto a partir de archivos PDF y soporte de reconocimiento óptico (OCR).&lt;/p&gt;
+&lt;p&gt;Desde tu emulador de terminal (ej. Alacritty), ejecuta el siguiente comando:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Actualizar paquetería e instalar dependencias del sistema&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt update
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo apt install -y tesseract-ocr tesseract-ocr-spa poppler-utils python3.10-venv&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;tesseract-ocr-spa&lt;/code&gt;&lt;/strong&gt;: Paquete de idioma español, vital para procesar la terminología de los dictámenes jurídicos.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;poppler-utils&lt;/code&gt;&lt;/strong&gt;: Proporciona herramientas subyacentes requeridas por la librería &lt;code&gt;pdf2image&lt;/code&gt; para rasterizar los PDFs.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Configuración del Entorno Virtual de Python&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;configuración-del-entorno-virtual-de-python&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#configuraci%c3%b3n-del-entorno-virtual-de-python&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El ecosistema maneja dependencias complejas de Machine Learning y Scrapeo. Puedes preparar el entorno utilizando el gestor tradicional &lt;code&gt;pip&lt;/code&gt; o el gestor de alta velocidad &lt;code&gt;uv&lt;/code&gt; (recomendado para optimizar tiempos de compilación y resolución de candados).&lt;/p&gt;
+&lt;h3&gt;Opción A: Utilizando UV (Estrategia Rápida)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;opción-a-utilizando-uv-estrategia-rápida&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#opci%c3%b3n-a-utilizando-uv-estrategia-r%c3%a1pida&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Si dispones de &lt;code&gt;uv&lt;/code&gt; instalado en tu sistema, aprovecha el archivo &lt;code&gt;uv.lock&lt;/code&gt; para garantizar un entorno determinista idéntico al de producción:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Sincronizar el entorno virtual instantáneamente&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;uv sync&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Opción B: Utilizando el flujo tradicional de Pip&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;opción-b-utilizando-el-flujo-tradicional-de-pip&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#opci%c3%b3n-b-utilizando-el-flujo-tradicional-de-pip&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Clonar y preparar el entorno virtual&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir -p ~/proyectos/beto_legal_mexico &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; ~/proyectos/beto_legal_mexico
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python3 -m venv .venv
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;source&lt;/span&gt; .venv/bin/activate
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Instalar el paquete en modo editable junto con sus dependencias base&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;pip install -e .&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2&gt;Inicialización de Estructuras Locales&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;inicialización-de-estructuras-locales&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#inicializaci%c3%b3n-de-estructuras-locales&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El sistema asume la existencia de la estructura base del Lakehouse. Asegúrate de generar los directorios de almacenamiento en la raíz de tu proyecto:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir -p data/&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;bronze,silver,gold&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Arquitectura y Flujo de Datos</title>
+      <link>//localhost:1313/docs/architecture/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/architecture/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Arquitectura del Sistema&lt;/h1&gt;&lt;p&gt;BETO Legal México implementa una arquitectura &lt;strong&gt;Medallion (Lakehouse)&lt;/strong&gt; integrada con un stack completo de MLOps para la puesta en producción.&lt;/p&gt;
+&lt;h2&gt;1. Data Pipeline (Ingesta a Gold)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-data-pipeline-ingesta-a-gold&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-data-pipeline-ingesta-a-gold&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La ingesta se compone de extractores automatizados que recolectan resoluciones de la SCJN y documentos de repositorios universitarios, volcándolos inicialmente en bruto.&lt;/p&gt;
+&lt;div role=&#34;img&#34; aria-label=&#34;Diagram&#34;&gt;
+  &lt;pre class=&#34;mermaid hx:mt-6&#34;&gt;
+    graph TD
+    subgraph Fuentes
+        SCJN[API SCJN]
+        PDFs[Archivos PDF Locales]
+        Diccionarios[Biblio Jurídica UNAM]
+    end
+    subgraph Modulo Ingesta
+        Scrapers[Módulo de Scrapers]
+    end
+    subgraph Lakehouse
+        Bronze[(Capa Bronze)]
+        Silver[(Capa Silver)]
+        Gold[(Capa Gold)]
+    end
+
+    SCJN --&amp;gt; Scrapers
+    PDFs --&amp;gt; Scrapers
+    Diccionarios --&amp;gt; Scrapers
+
+    Scrapers --&amp;gt; Bronze
+    Bronze --&amp;gt;|OCR &amp;amp; Limpieza| Silver
+    Silver --&amp;gt;|Tokenización &amp;amp; Features| Gold
+  &lt;/pre&gt;
+&lt;/div&gt;&lt;h2&gt;2. Feature Engineering&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-feature-engineering&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-feature-engineering&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;En la capa Silver, se aplican transformaciones clave antes de la etapa de modelado. Esto incluye la fragmentación contextual de largos textos legales (Chunking) y la inyección de aumentación de datos (Augmentation).&lt;/p&gt;
+&lt;div role=&#34;img&#34; aria-label=&#34;Diagram&#34;&gt;
+  &lt;pre class=&#34;mermaid hx:mt-6&#34;&gt;
+    graph LR
+    S[(Capa Silver)] --&amp;gt; C[Transforms: Chunking]
+    C --&amp;gt; T[Transforms: Tokenization]
+    T --&amp;gt; N[NER Features]
+    T --&amp;gt; CL[Classification Features]
+    T --&amp;gt; R[Retrieval Features]
+  &lt;/pre&gt;
+&lt;/div&gt;&lt;h2&gt;3. Serving y MLOps&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;3-serving-y-mlops&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#3-serving-y-mlops&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La orquestación general está administrada por &lt;strong&gt;Airflow&lt;/strong&gt;. En tiempo de ejecución, una API RESTful (&lt;strong&gt;FastAPI&lt;/strong&gt;) provee inferencia síncrona, apoyada por una cola de tareas (&lt;strong&gt;Celery workers&lt;/strong&gt;) para procesamiento asíncrono o inferencia en batch, mientras métricas críticas fluyen hacia &lt;strong&gt;Prometheus&lt;/strong&gt; y &lt;strong&gt;Grafana&lt;/strong&gt;.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Preprocesamiento y Normalización</title>
+      <link>//localhost:1313/docs/text_preprocessing/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/text_preprocessing/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Normalización de Texto Legal (Silver a Gold)&lt;/h1&gt;&lt;p&gt;La extracción de texto mediante Tesseract genera cadenas con ruido tipográfico debido a la estructura física de los libros analizados (columnas, notas al pie, encabezados y folios). Este módulo documenta las heurísticas aplicadas en el pipeline para limpiar el archivo &lt;code&gt;diccionario_completo.txt&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;1. Desafíos Detectados en el Corpus OCR&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-desafíos-detectados-en-el-corpus-ocr&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-desaf%c3%ados-detectados-en-el-corpus-ocr&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Los documentos de la Biblioteca Jurídica Virtual de la UNAM presentan patrones de ruido que rompen la continuidad sintáctica requerida por las arquitecturas basadas en Transformers:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Silabeo por Salto de Línea:&lt;/strong&gt; División incorrecta de tokens debido al formato a dos columnas (ej. &lt;code&gt;fami- liar&lt;/code&gt;, &lt;code&gt;reem- bol- so&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Inyección de Metadatos de Repositorio:&lt;/strong&gt; Cadenas idénticas añadidas en cada página (ej. &lt;code&gt;DR © 1982. Universidad Nacional Autónoma de México - Instituto de Investigaciones Jurídicas&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Enlaces e Indicadores de Páginas:&lt;/strong&gt; URLs institucionales fijas que sesgan las distribuciones de embeddings de palabras (ej. &lt;code&gt;https://biblio.juridicas.unam.mx/bjv&lt;/code&gt; o &lt;code&gt;Libro completo en: ...&lt;/code&gt;).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;2. Pipeline de Limpieza Algorítmica&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-pipeline-de-limpieza-algorítmica&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-pipeline-de-limpieza-algor%c3%adtmica&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Para mitigar estos problemas, el pipeline implementa un procesador basado en expresiones regulares (&lt;code&gt;re&lt;/code&gt;) y segmentadores contextuales antes de almacenar las secuencias en la capa Gold.&lt;/p&gt;
+&lt;h3&gt;Matriz de Transformaciones Técnicas&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;matriz-de-transformaciones-técnicas&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#matriz-de-transformaciones-t%c3%a9cnicas&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Tipo de Artefacto&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Expresión Regular / Método&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;Acción Correctiva&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Guiones de fragmentación&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;r&#39;(\\w+)-\\s*\\n\\s*(\\w+)&#39;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Une las sílabas eliminando el guion y el salto de línea para restaurar el token original (ej. &lt;code&gt;famili- ar&lt;/code&gt; → &lt;code&gt;familiar&lt;/code&gt;).&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Encabezados de repositorio&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;r&#39;(?i)Esta obra forma parte del acervo.*&#39;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Remueve bloques de texto estáticos pertenecientes al metadato del PDF de la UNAM.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Números de página aislados&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;r&#39;^\\s*\\d+\\s*$&#39;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Identifica líneas que contienen únicamente folios numéricos para evitar que rompan el contexto conceptual entre párrafos continuos.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Normalización de espacios&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;code&gt;r&#39;\\s+&#39;&lt;/code&gt; → &lt;code&gt;&#39; &#39;&lt;/code&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Colapsa múltiples saltos de línea y tabuladores en espacios simples para un flujo lineal uniforme de tokens.&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;3. Preparación de Secuencias para BETO (Gold)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;3-preparación-de-secuencias-para-beto-gold&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#3-preparaci%c3%b3n-de-secuencias-para-beto-gold&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Una vez que el texto carece de ruido estructural, se ejecutan las últimas tareas de Feature Engineering descritas en la arquitectura:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Remoción Selectiva de Stopwords:&lt;/strong&gt; Preservación estricta de preposiciones que configuran fórmulas legales (ej. &amp;ldquo;ab intestato&amp;rdquo;, &amp;ldquo;de jure&amp;rdquo;, &amp;ldquo;de facto&amp;rdquo;) para evitar la pérdida de sentido jurídico.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mapeo de Entidades (NER):&lt;/strong&gt; Extracción e indexación automática de referencias a normatividades mexicanas (ej. &lt;code&gt;LFT&lt;/code&gt;, &lt;code&gt;CC&lt;/code&gt;, &lt;code&gt;DO&lt;/code&gt;, &lt;code&gt;SHCP&lt;/code&gt;, &lt;code&gt;SCJN&lt;/code&gt;) y citas a leyes federales históricas presentes en los textos normalizados.&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Referencia de la API (Módulos)</title>
+      <link>//localhost:1313/docs/modules/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/modules/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Referencia de Módulos Principales&lt;/h1&gt;&lt;p&gt;Esta sección detalla la lógica interna de los módulos de ingesta y procesamiento, abstrayendo cómo interactúan las capas lógicas representadas en el código fuente.&lt;/p&gt;
+&lt;h2&gt;1. Scraper de Diccionarios Jurídicos&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-scraper-de-diccionarios-jurídicos&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-scraper-de-diccionarios-jur%c3%addicos&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Archivo fuente:&lt;/strong&gt; &lt;code&gt;src/Beto/pipeline/01_ingestion/scrapers/diccionarios/scrapper_diccionario_juridico.py&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Explicación Lógica&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;explicación-lógica&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#explicaci%c3%b3n-l%c3%b3gica&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;La clase &lt;code&gt;UNAMVacuum&lt;/code&gt; gestiona la descarga paralela y segura de tomos desde servidores académicos. Dado que algunos servidores carecen de certificados estrictos o presentan bloqueos anti-bot, la clase configura una &lt;code&gt;requests.Session&lt;/code&gt; predefinida con un &lt;em&gt;User-Agent&lt;/em&gt; moderno e inhabilita las advertencias SSL mediante &lt;code&gt;urllib3.disable_warnings&lt;/code&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;find_pdfs_in_page(url)&lt;/code&gt;:&lt;/strong&gt; Parsea el DOM mediante &lt;code&gt;BeautifulSoup&lt;/code&gt; para extraer toda etiqueta &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; que contenga un enlace a un PDF. Reconstruye las rutas relativas inyectando el host absoluto &lt;code&gt;https://biblio.juridicas.unam.mx/bjv/&lt;/code&gt;. Se emplea un objeto de tipo &lt;code&gt;set()&lt;/code&gt; para desduplicar rutas.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;download_file(url, folder, prefix, index)&lt;/code&gt;:&lt;/strong&gt; Soporta un mecanismo de streaming (&lt;code&gt;iter_content&lt;/code&gt;) con chunks de &lt;code&gt;8192 bytes&lt;/code&gt; para evitar colapsar la memoria del servidor al descargar documentos masivos. Emplea nativamente &lt;code&gt;pathlib.Path&lt;/code&gt; para una creación segura y cross-platform de las rutas de guardado.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;2. Scraper del Repositorio SCJN&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-scraper-del-repositorio-scjn&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-scraper-del-repositorio-scjn&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Archivo fuente:&lt;/strong&gt; &lt;code&gt;src/Beto/pipeline/01_ingestion/scrapers/repositorio_scjn/scrapper_scjn.py&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Explicación Lógica&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;explicación-lógica-1&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#explicaci%c3%b3n-l%c3%b3gica-1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;La clase &lt;code&gt;Extraer_scjn&lt;/code&gt; está diseñada para comunicarse con la API de &amp;ldquo;Engroses&amp;rdquo; del Bicentenario de la SCJN. No procesa DOM, sino que ataca endpoints REST con paginación paramétrica.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;request_api_ids()&lt;/code&gt;:&lt;/strong&gt; Hace peticiones GET al endpoint de metadatos &lt;code&gt;.../api/v1/engroses/ids&lt;/code&gt; pasando argumentos de límite (&lt;code&gt;offset&lt;/code&gt;, &lt;code&gt;limit&lt;/code&gt;, &lt;code&gt;page&lt;/code&gt;). Construye un diccionario &lt;code&gt;id: url&lt;/code&gt; en memoria.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;obtener_urls_docx()&lt;/code&gt;:&lt;/strong&gt; Realiza un cruce de datos iterando sobre las URLs de los IDs recolectados. Ejecuta el filtro dinámico para quedarse únicamente con los atributos &lt;code&gt;urlInternet&lt;/code&gt; y &lt;code&gt;expediente&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Generación de Salida:&lt;/strong&gt; Por cada batch, el resultado final no sobreescribe un único formato, sino que se serializa tanto en &lt;code&gt;datos_limpios.json&lt;/code&gt; (para interoperabilidad en Python) como en un dataframe indexado en &lt;code&gt;scjn_api.xlsx&lt;/code&gt; usando &lt;code&gt;pandas&lt;/code&gt;, para futuras inspecciones de los engroses.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;3. Extracción OCR Asíncrona&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;3-extracción-ocr-asíncrona&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#3-extracci%c3%b3n-ocr-as%c3%adncrona&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Archivo fuente:&lt;/strong&gt; &lt;code&gt;src/Beto/pipeline/pipelines/ocr_extraction.py&lt;/code&gt;&lt;/p&gt;
+&lt;h3&gt;Explicación Lógica&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;explicación-lógica-2&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#explicaci%c3%b3n-l%c3%b3gica-2&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Este módulo asume el esfuerzo de cálculo pesado del proyecto: trasladar los PDFs escaneados de la capa Bronze a la capa Silver (texto enriquecido y analizable).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Uso de multiprocesamiento:&lt;/strong&gt; Evita el GIL de Python y bloqueos I/O orquestando un pool con &lt;code&gt;concurrent.futures.ProcessPoolExecutor&lt;/code&gt;. La constante &lt;code&gt;MAX_WORKERS&lt;/code&gt; modula la intensidad sobre la CPU.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;procesar_un_pdf()&lt;/code&gt;:&lt;/strong&gt; A través de &lt;code&gt;pdf2image.convert_for_path&lt;/code&gt;, desglosa el PDF en imágenes JPG a 200 DPI. Acto seguido, inyecta la bandera &lt;code&gt;--psm 3&lt;/code&gt; (Page Segmentation Mode: fully automatic page segmentation) sobre &lt;code&gt;pytesseract&lt;/code&gt; utilizando &lt;code&gt;lang=&amp;quot;spa&amp;quot;&lt;/code&gt; para capturar con precisión la ortografía jurídica mexicana.&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Esquema de Datos (Bronze)</title>
+      <link>//localhost:1313/docs/data_schema/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/data_schema/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Referencia del Esquema de Datos (Capa Bronze)&lt;/h1&gt;&lt;p&gt;Para asegurar la trazabilidad del pipeline de datos antes de las fases de limpieza profunda, los scrapers almacenan la información estructurada bajo contratos de datos específicos.&lt;/p&gt;
+&lt;h2&gt;1. Mapeo de la API de Engroses de la SCJN&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-mapeo-de-la-api-de-engroses-de-la-scjn&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-mapeo-de-la-api-de-engroses-de-la-scjn&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El archivo de salida intermedio generado por el scraper de la SCJN se localiza en &lt;code&gt;data/bronze/scjn/datos_limpios.json&lt;/code&gt;. Este archivo mapea de forma unívoca el identificadores secuencial de la resolución con sus propiedades de localización remota e identificación interna de expediente.&lt;/p&gt;
+&lt;h3&gt;Estructura del JSON de Ingesta&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;estructura-del-json-de-ingesta&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#estructura-del-json-de-ingesta&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Cada registro utiliza el ID único de la SCJN como clave principal (&lt;code&gt;string&lt;/code&gt;) para agilizar las búsquedas en memoria indexada:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nt&#34;&gt;&amp;#34;ID_RESOLUCION&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;#34;expediente&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;NÚMERO_DE_EXPEDIENTE&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nt&#34;&gt;&amp;#34;urlInternet&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;URL_ABSOLUTA_AL_DOCX&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3&gt;Diccionario de Campos&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;diccionario-de-campos&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#diccionario-de-campos&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h3&gt;&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Campo&lt;/th&gt;
+          &lt;th&gt;Tipo&lt;/th&gt;
+          &lt;th&gt;Capa&lt;/th&gt;
+          &lt;th&gt;Descripción&lt;/th&gt;
+          &lt;th&gt;Ejemplo&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;ID_RESOLUCION&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;String&lt;/code&gt; (Index)&lt;/td&gt;
+          &lt;td&gt;Bronze&lt;/td&gt;
+          &lt;td&gt;Identificador numérico único asignado por la API de la SCJN.&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;quot;230878&amp;quot;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;expediente&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;String&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;Bronze&lt;/td&gt;
+          &lt;td&gt;Nomenclatura oficial del expediente jurídico en México.&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;&amp;quot;5/2025-CA&amp;quot;&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;urlInternet&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;String&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;Bronze&lt;/td&gt;
+          &lt;td&gt;Dirección URL directa del servidor de la SCJN para la descarga del archivo binario (&lt;code&gt;.docx&lt;/code&gt;).&lt;/td&gt;
+          &lt;td&gt;&lt;code&gt;https://www2.scjn.gob.mx/.../2_344294_7087.docx&lt;/code&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;2. Archivos de Inspección Rápida (&lt;code&gt;.xlsx&lt;/code&gt;)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-archivos-de-inspección-rápida-xlsx&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-archivos-de-inspecci%c3%b3n-r%c3%a1pida-xlsx&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;De manera paralela al archivo JSON, el script &lt;code&gt;scrapper_scjn.py&lt;/code&gt; persiste una réplica estructurada en un formato tabular compatible con &lt;code&gt;pandas&lt;/code&gt; (&lt;code&gt;scjn_api.xlsx&lt;/code&gt;). Este archivo actúa como puente de validación y control de auditoría externa para los analistas que requieran revisar el volumen total de engroses capturados por cada batch de ejecución de Airflow.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Ejemplos de Uso</title>
+      <link>//localhost:1313/docs/usage_examples/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/usage_examples/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Guía Práctica de Ejecución&lt;/h1&gt;&lt;h2&gt;1. Ejecutar el Scraper del Repositorio SCJN&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-ejecutar-el-scraper-del-repositorio-scjn&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-ejecutar-el-scraper-del-repositorio-scjn&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Para probar la ingesta inicial desde la terminal y construir los registros desde la API de la SCJN:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# Ejecución interactiva desde el directorio raíz del proyecto&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python src/Beto/pipeline/01_ingestion/scrapers/repositorio_scjn/scrapper_scjn.py&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Respuesta del CLI esperada:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Iniciando extracción masiva en: /.../data/bronze/scjn
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;IDs obtenidos: 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Página 1 terminada. Total: 1000
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;JSON guardado en: /.../data/bronze/scjn/datos_limpios.json
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Excel guardado en: /.../data/bronze/scjn/scjn_api.xlsx&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2&gt;2. Ejecutar el Pipeline OCR (Bronze -&amp;gt; Silver)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-ejecutar-el-pipeline-ocr-bronze---silver&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-ejecutar-el-pipeline-ocr-bronze---silver&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Una vez poblada la carpeta &lt;code&gt;data/bronze/diccionarios&lt;/code&gt; con los documentos de la UNAM, corre el pipeline de OCR:&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;python src/Beto/pipeline/pipelines/ocr_extraction.py&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Comportamiento:&lt;/strong&gt;
+El script localizará automáticamente la ruta raíz (retrocediendo iterativamente usando la función de configuración interna &lt;code&gt;get_project_root()&lt;/code&gt;). Desplegará la carga de trabajo en múltiples workers según &lt;code&gt;MAX_WORKERS&lt;/code&gt; y creará el archivo unificado &lt;code&gt;diccionario_completo.txt&lt;/code&gt; en la capa Silver.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;strong&gt;Advertencia de hardware:&lt;/strong&gt; Si el sistema o ventana X11 presenta saturación de recursos por procesos Tesseract huérfanos, ajusta a &lt;code&gt;MAX_WORKERS = 1&lt;/code&gt; o &lt;code&gt;2&lt;/code&gt; en el script antes de lanzar jobs superiores a los 3 GB de PDFs.&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Configuración</title>
+      <link>//localhost:1313/docs/configuration/</link>
+      <pubDate>Sun, 24 May 2026 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/configuration/</guid>
+      <description>
+        
+        
+        &lt;h1&gt;Archivos de Configuración del Proyecto&lt;/h1&gt;&lt;p&gt;BETO Legal México centraliza sus rutas y dependencias para garantizar consistencia estructural sin &lt;em&gt;hardcoding&lt;/em&gt;.&lt;/p&gt;
+&lt;h2&gt;1. Metadatos y Dependencias (&lt;code&gt;pyproject.toml&lt;/code&gt;)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;1-metadatos-y-dependencias-pyprojecttoml&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#1-metadatos-y-dependencias-pyprojecttoml&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;A diferencia de sistemas antiguos basados puramente en &lt;code&gt;setup.py&lt;/code&gt;, el proyecto utiliza el estándar PEP 518/621.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Qué hace y cómo funciona:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Declara &lt;code&gt;setuptools&lt;/code&gt; como backend de construcción.&lt;/li&gt;
+&lt;li&gt;Fija las dependencias nucleares con versiones hardcodeadas para garantizar determinismo en despliegues a Kubernetes / Docker (ej. &lt;code&gt;beautifulsoup4==4.14.3&lt;/code&gt;, &lt;code&gt;pandas==3.0.3&lt;/code&gt;, &lt;code&gt;pytesseract==0.3.13&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Habilita el paquete en modo instalable bajo el esquema de módulo global &lt;code&gt;Beto&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;Fragmento Relevante (&lt;code&gt;pyproject.toml&lt;/code&gt;):&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code&#34;&gt;
+
+&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;build-system&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;requires&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;setuptools&amp;gt;=61.0&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;build-backend&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;setuptools.build_meta&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;project&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;Beto&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;version&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;0.1.0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;dependencies&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;beautifulsoup4==4.14.3&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;s2&#34;&gt;&amp;#34;pandas==3.0.3&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c&#34;&gt;# ... dependencias core&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0&#34;&gt;
+  &lt;button
+    class=&#34;hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50&#34;
+    title=&#34;Copy code&#34;
+    aria-label=&#34;Copy code&#34;
+    data-copied-label=&#34;Copied!&#34;
+  &gt;
+    &lt;div class=&#34;hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+&lt;div class=&#34;hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4&#34;&gt;&lt;/div&gt;
+  &lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2&gt;2. Gestor Dinámico de Rutas (&lt;code&gt;src/Beto/utils/config.py&lt;/code&gt;)&lt;span class=&#34;hx:absolute hx:-mt-20&#34; id=&#34;2-gestor-dinámico-de-rutas-srcbetoutilsconfigpy&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#2-gestor-din%c3%a1mico-de-rutas-srcbetoutilsconfigpy&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Qué hace y cómo funciona:&lt;/strong&gt;
+Al invocar módulos desde carpetas anidadas diferentes, los caminos relativos (ej. &lt;code&gt;../../data&lt;/code&gt;) fallan sistemáticamente en Python. Este script provee constantes universales inmutables derivadas en tiempo de ejecución.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Implementa &lt;code&gt;get_project_root()&lt;/code&gt;, una iteración inteligente utilizando la clase nativa &lt;code&gt;Path&lt;/code&gt; (&lt;code&gt;pathlib&lt;/code&gt;) que asciende en el árbol de directorios hasta encontrar el archivo ancla &lt;code&gt;pyproject.toml&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Exporta objetos &lt;code&gt;Path&lt;/code&gt; estandarizados (&lt;code&gt;PROJECT_ROOT&lt;/code&gt;, &lt;code&gt;BETO_ROOT&lt;/code&gt;, &lt;code&gt;BRONZE_DIR&lt;/code&gt;, &lt;code&gt;SILVER_DIR&lt;/code&gt;, &lt;code&gt;GOLD_DIR&lt;/code&gt;), los cuales pueden ser concatenados de forma segura mediante el operador &lt;code&gt;/&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/docs/api_specification/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/api_specification/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/docs/data_pipeline/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/data_pipeline/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/docs/system_design/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/system_design/</guid>
+      <description>
+        
+        
+        
+      </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>//localhost:1313/docs/uml/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/uml/</guid>
+      <description>
+        
+        
+        &lt;p&gt;&lt;img src=&#34;//localhost:1313/images/pipelines_uml/data_pipeline.png&#34; alt=&#34;pipeline&#34;  loading=&#34;lazy&#34; /&gt;
+&lt;img src=&#34;//localhost:1313/images/pipelines_uml/features.png&#34; alt=&#34;features&#34;  loading=&#34;lazy&#34; /&gt;
+&lt;img src=&#34;//localhost:1313/images/pipelines_uml/mlops.png&#34; alt=&#34;mlops&#34;  loading=&#34;lazy&#34; /&gt;
+&lt;img src=&#34;//localhost:1313/images/pipelines_uml/serving.png&#34; alt=&#34;serving&#34;  loading=&#34;lazy&#34; /&gt;
+&lt;img src=&#34;//localhost:1313/images/pipelines_uml/training.png&#34; alt=&#34;training&#34;  loading=&#34;lazy&#34; /&gt;&lt;/p&gt;
+
+      </description>
+    </item>
+    
+    <item>
+      <title>Demo Page</title>
+      <link>//localhost:1313/docs/first-page/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>//localhost:1313/docs/first-page/</guid>
+      <description>
+        
+        
+        &lt;p&gt;A simple demo page.&lt;/p&gt;
+
+      </description>
+    </item>
+    
+  </channel>
+</rss>
