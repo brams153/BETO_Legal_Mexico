@@ -38,6 +38,19 @@ El proyecto busca servir como hoja de ruta para que otros países latinoamerican
 ## 📁 Estructura del Repositorio
 ## Estructura del directorio
 <!-- readme-tree start -->
+```
+.
+├── content
+│   └── docs
+├── src
+│   └── Beto
+│       └── utils
+└── static
+    └── images
+        └── pipelines_uml
+
+9 directories
+```
 <!-- readme-tree end -->
 
 # **Aviso Importante**
