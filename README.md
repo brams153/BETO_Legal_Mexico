@@ -38,6 +38,24 @@ El proyecto busca servir como hoja de ruta para que otros países latinoamerican
 ## 📁 Estructura del Repositorio
 ## Estructura del directorio
 <!-- readme-tree start -->
+```
+.
+├── content
+│   └── docs
+├── src
+│   └── Beto
+│       ├── pipeline
+│       │   └── 01_ingestion
+│       │       └── scrapers
+│       │           ├── diccionarios
+│       │           └── repositorio_scjn
+│       └── utils
+└── static
+    └── images
+        └── pipelines_uml
+
+14 directories
+```
 <!-- readme-tree end -->
 
 # **Aviso Importante**
