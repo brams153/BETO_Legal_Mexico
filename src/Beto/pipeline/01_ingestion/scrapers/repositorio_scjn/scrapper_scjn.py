@@ -1,17 +1,17 @@
 import json
 import time
-import traceback
 import pandas as pd
+import traceback
 from Beto.utils.config import BRONZE_DIR
 from Beto.utils.client import obtener_cliente_http
+import Beto.utils.wget_downloader as wget
 
 
 class ExtraerSCJN:
     def __init__(self):
-        # Corregido: Inicialización centralizada con formato estricto JSON para APIs
         self.session = obtener_cliente_http(es_api=True)
 
-        self.output_path = BRONZE_DIR / "scjn" / "sentencias"
+        self.output_path = BRONZE_DIR / "scjn" / "sentencias" / "metadatos"
         self.output_path.mkdir(parents=True, exist_ok=True)
 
         self.pagina_n = 0
@@ -42,8 +42,8 @@ class ExtraerSCJN:
         except Exception as e:
             print(f"❌ Error en request_api_ids: {e}")
 
-    def obtener_urls_docx(self):
-        filtros = ["urlInternet", "expediente"]
+    def obtener_urls_docx(self, filtros=["urlInternet", "boletines"]):
+        # filtros = ["urlInternet", "expediente"]
         resultados = {}
 
         for clave, valor in self.diccionario_ids_urls.items():
@@ -58,7 +58,7 @@ class ExtraerSCJN:
 
     def iterar_paginas(self, max_paginas=1):
         print(
-            f"🚀 Iniciando extracción masiva de SCJN en: {self.output_path}\n",
+            f"Iniciando extracción masiva de SCJN en: {self.output_path}\n",
             flush=True,
         )
         for _ in range(max_paginas):
@@ -84,7 +84,6 @@ class ExtraerSCJN:
             json.dump(self.diccionario_completo, f, ensure_ascii=False, indent=4)
         print(f"💾 JSON guardado en: {ruta_json}")
 
-        # Corregido: Usamos el método nativo de asignación from_dict
         ruta_csv = self.output_path / "scjn_sentencias.csv"
         df = pd.DataFrame.from_dict(self.diccionario_completo, orient="index")
         df.to_csv(ruta_csv, index_label="id_scjn")
@@ -99,3 +98,6 @@ if __name__ == "__main__":
     except Exception:
         print("Falla crítica en el flujo principal:")
         traceback.print_exc()
+    wget.wget_downloader(
+        archivo_csv, ruta_salida, col_id="id_scjn", col_url="urlInternet"
+    )
